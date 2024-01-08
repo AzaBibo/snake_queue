@@ -6,7 +6,6 @@ import java.util.Random;
 public class Main {
 	
 	int[][] map = new int[22][10]; // initial map, which we will modify
-	int[][] final_map = new int[22][10]; // final map
 	int step = 220; // to find the least path 
 	int total_paths = 0;
 	
@@ -43,6 +42,7 @@ public class Main {
 		
 		Queue<Pointer> q = new LinkedList<>();
 		HashSet<String> hs = new HashSet<String>(); // to store previously visited coordinations
+		int[][] final_map = null; // final map
 		
 		q.add(new Pointer(hy, hx, 0, map)); // add the first coordinate to the queue
 
@@ -56,7 +56,7 @@ public class Main {
 					if(current.desk[current.y][current.x] == 4 && current.y == ty && current.x == tx) { // if the current is the target 
 						total_paths++;
 						if(current.steps < step) {
-							final_map = current.desk;
+							final_map = current.desk.clone();
 							step = current.steps;
 						}
 					}
@@ -68,6 +68,13 @@ public class Main {
 				}
 			}
 		}
+				
+		// Printing the final matrix
+		System.out.println("\n===================\n");
+		System.out.println("Printing the final matrix");
+		printing(final_map);
+		System.out.println("\nTotal number of paths: " + total_paths);
+		System.out.println("Shortest one took " + step + " steps");
 	}
 
 	public static void main(String[] args) {
@@ -108,13 +115,6 @@ public class Main {
 		
 		//engine.engine(tx, ty, hx, hy, ox1, oy1, ox2, oy2, ox3, oy3);
 		engine.engine(8, 1, 4, 5, 8, 2, 9, 2, 7, 2);
-		
-		// Printing the final matrix
-		System.out.println("\n===================\n");
-		System.out.println("Printing the final matrix");
-		printing(engine.final_map);
-		System.out.println("\nTotal number of paths: " + engine.total_paths);
-		System.out.println("Shortest one took " + engine.step + " steps");
 	}
 
 }
