@@ -17,6 +17,22 @@ public class Main {
 			System.out.println();
 		}
 	}
+
+	public static int[][] deepCopy(int[][] original) {
+		if (original == null) {
+			return null;
+		}
+	
+		int[][] copy = new int[original.length][];
+		for (int i = 0; i < original.length; i++) {
+			// Manual deep copy for each subarray (row)
+			copy[i] = new int[original[i].length];
+			System.arraycopy(original[i], 0, copy[i], 0, original[i].length);
+		}
+	
+		return copy;
+	}
+	
 	
 	public void engine(int tx, int ty, int hx, int hy, int ox1, int oy1, int ox2, int oy2, int ox3, int oy3) {
 		
@@ -51,12 +67,12 @@ public class Main {
 
 			for(int i = 0; i < 4; i++) {
 				if((temp.x + dx[i] < 10 && temp.x + dx[i] >= 0) && (temp.y + dy[i] >= 0 && temp.y + dy[i] < 22) && map[temp.y + dy[i]][temp.x + dx[i]] != 3 ) {
-					Pointer current = new Pointer(temp.y + dy[i], temp.x + dx[i], temp.steps + 1, temp.desk.clone());
+					Pointer current = new Pointer(temp.y + dy[i], temp.x + dx[i], temp.steps + 1, deepCopy(temp.desk));
 
 					if(current.desk[current.y][current.x] == 4 && current.y == ty && current.x == tx) { // if the current is the target 
 						total_paths++;
 						if(current.steps < step) {
-							final_map = current.desk.clone();
+							final_map = deepCopy(current.desk);
 							step = current.steps;
 						}
 					}
@@ -113,8 +129,8 @@ public class Main {
 			if(oy3 != ty && oy3 != hy && ox3 != tx && ox3 != hx) break;
 		} 
 		
-		//engine.engine(tx, ty, hx, hy, ox1, oy1, ox2, oy2, ox3, oy3);
-		engine.engine(8, 1, 4, 5, 8, 2, 9, 2, 7, 2);
+		engine.engine(tx, ty, hx, hy, ox1, oy1, ox2, oy2, ox3, oy3);
+		//engine.engine(8, 1, 4, 5, 8, 2, 9, 2, 7, 2);
 	}
 
 }
