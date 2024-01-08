@@ -1,3 +1,4 @@
+
 public class Pointer {
     private int x;
     private int y;
@@ -10,4 +11,9 @@ public class Pointer {
         this.steps = steps;
         this.desk = desk;
     }
+
+    public getX() { return x; }
+    public getY() { return y; }
+    public getSteps() { return steps; }
+    public getDesk() { return desk; }
 }
