@@ -1,10 +1,8 @@
-package src;
-
 public class Pointer {
-    private int x;
-    private int y;
-    private int steps;
-    private int[][] desk;
+    int x;
+    int y;
+    int steps;
+    int[][] desk;
 
     public Pointer(int y, int x, int steps, int[][] desk) {
         this.x = x;

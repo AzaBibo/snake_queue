@@ -1,15 +1,14 @@
-package src;
-
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.HashSet;
 import java.util.Random;
 
-public class Snake {
+public class Main {
 	
 	int[][] map = new int[22][10]; // initial map, which we will modify
 	int[][] final_map = new int[22][10]; // final map
 	int step = 220; // to find the least path 
+	int total_paths = 0;
 	
 	public static void printing(int[][] map) { // Printing the desk
 		for (int i = 0; i < map.length; i++) {
@@ -27,6 +26,7 @@ public class Snake {
 				map[i][j] = 0;
 			}
 		}
+
 		
 		map[ty][tx] = 4; // target
 		map[hy][hx] = 1; // worm head
@@ -41,27 +41,27 @@ public class Snake {
 		int[] dx = {0, 0, 1, -1};
 		int[] dy = {1, -1, 0, 0};
 		
-		Queue<Queue_Try> q = new LinkedList<>();
+		Queue<Pointer> q = new LinkedList<>();
 		HashSet<String> hs = new HashSet<String>(); // to store previously visited coordinations
 		
 		q.add(new Pointer(hy, hx, 0, map)); // add the first coordinate to the queue
 
-		while(!q.empty()) {
-			Pointer temp = q.remove();
+		while(!q.isEmpty()) {
+			Pointer temp = q.poll();
 
 			for(int i = 0; i < 4; i++) {
 				if((temp.x + dx[i] < 10 && temp.x + dx[i] >= 0) && (temp.y + dy[i] >= 0 && temp.y + dy[i] < 22) && map[temp.y + dy[i]][temp.x + dx[i]] != 3 ) {
-					Pointer current = new Pointer(temp.y + dy[i], temp.x + dx[i], temp.steps + 1, map);
+					Pointer current = new Pointer(temp.y + dy[i], temp.x + dx[i], temp.steps + 1, temp.desk.clone());
 
-					if(map[current.y][current.x] == 4 && current.y == ty && current.x == tx) { // if the current is the target 
-						if(current.steps < steps) {
-							current.map[current.y][current.x] = 2;
-							final_map = current.map;
-							steps = current.steps;
+					if(current.desk[current.y][current.x] == 4 && current.y == ty && current.x == tx) { // if the current is the target 
+						total_paths++;
+						if(current.steps < step) {
+							final_map = current.desk;
+							step = current.steps;
 						}
 					}
 					else if(!hs.contains(String.valueOf(current.y) + "-" + String.valueOf(current.x))) { // the current Pointer has not been visited before, and it's not the target 
-						current.map[current.y][current.x] = 2;
+						if(current.desk[current.y][current.x] != 1) current.desk[current.y][current.x] = 2;
 						q.add(current);
 						hs.add(String.valueOf(current.y) + "-" + String.valueOf(current.x)); // store the coordinates of the current node, mark it as "visited"
 					}
@@ -71,7 +71,7 @@ public class Snake {
 	}
 
 	public static void main(String[] args) {
-		Snake engine = new Snake();
+		Main engine = new Main();
 		
 		Random rand = new Random();
 		int tx = rand.nextInt(0, 10), ty = rand.nextInt(0, 22);
@@ -107,13 +107,14 @@ public class Snake {
 		} 
 		
 		//engine.engine(tx, ty, hx, hy, ox1, oy1, ox2, oy2, ox3, oy3);
-		engine.engine(8, 1, 4, 5, 5, 1, 6, 2, 7, 2);
+		engine.engine(8, 1, 4, 5, 8, 2, 9, 2, 7, 2);
 		
 		// Printing the final matrix
 		System.out.println("\n===================\n");
 		System.out.println("Printing the final matrix");
 		printing(engine.final_map);
-		System.out.println("\nStep: " + engine.step);
+		System.out.println("\nTotal number of paths: " + engine.total_paths);
+		System.out.println("Shortest one took " + engine.step + " steps");
 	}
 
 }
