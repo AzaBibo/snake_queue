@@ -132,5 +132,4 @@ public class Main {
 		engine.engine(tx, ty, hx, hy, ox1, oy1, ox2, oy2, ox3, oy3);
 		//engine.engine(8, 1, 4, 5, 8, 2, 9, 2, 7, 2);
 	}
-
 }
