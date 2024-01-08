@@ -12,8 +12,8 @@ public class Pointer {
         this.desk = desk;
     }
 
-    public getX() { return x; }
-    public getY() { return y; }
-    public getSteps() { return steps; }
-    public getDesk() { return desk; }
+    public int getX() { return x; }
+    public int getY() { return y; }
+    public int getSteps() { return steps; }
+    public int[][] getDesk() { return desk; }
 }
