@@ -1,10 +1,14 @@
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
+import Pointer;
 
-public class Main {
-
-	int[][] map = new int[22][10];
+public class Snake {
 	
-	public void printing(int[][] map) {
+	int[][] map = new int[22][10];
+	int step = 220;
+	
+	public static void printing(int[][] map) {
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map[i].length; j++) {
 				System.out.print(map[i][j] + " ");
@@ -25,146 +29,79 @@ public class Main {
 		map[oy1][ox1] = 3;
 		map[oy2][ox2] = 3;
 		map[oy3][ox3] = 3;
-
-		int step = 0;
-		int u = -1, d = 1, r = 1, l = -1;
-		int dx, dy;
 		
-		// direction initialization
-		if (tx < hx)
-			dx = l;
-		else 
-			dx = r;
-		
-		if(ty < hy) 
-			dy = u;
-		else 
-			dy = d;
-
-		// Printing the matrix
 		System.out.println("Printing the initial matrix");
 		printing(map);
-		
-		while (tx != hx || ty != hy) { // until it reaches the target
-			if((map[hy][hx + dx] != 3 && hx + dx <= map[0].length && hx + dx >= 0) || (map[hy + dy][hx] != 3 && hy + dy < map.length && hy + dy >= 0)) {				
-				while (hy != ty && hy + dy < map.length && hy + dy >= 0 && map[hy + dy][hx] != 3) { // hy != ty, and the y path is clear
-					hy += dy;
-					step++;
-					map[hy][hx] = 2;
-				}
-				
-				while(hx != tx && hx + dx < map[0].length && hx + dx >= 0 && map[hy][hx + dx] != 3) { // hx != tx, and the x path is clear
-					hx += dx;
-					step++;
-					map[hy][hx] = 2;			
-				}
-				
-				while(hy != ty && map[hy + dy][hx] == 3 && hy + dy >= 0 && hy + dy < map.length) { // 
-					if(map[hy][hx + dx] != 3) {
-						while(map[hy][hx + dx] != 3 && hx + dx > 0 && hx + dx < map[0].length) {
-							hx += dx;
-							step++;
-							map[hy][hx] = 2;
-						}
-					}
-				}
-				
-				while(map[hy][hx + dx] == 3 && hy + dy >= 0 && hy + dy < map.length) {
-					if(map[hy + dy][hx] != 3) {
-						while(map[hy + dy][hx] != 3 && (hy + dy < map.length) && (hy + dy > 0)) {
-							hy += dy;
-							step++;
-							map[hy][hx] = 2;
-						}					
-					}
-				}
-				
-				if(hx == tx && map[hy + dy][hx] == 3) {					
-					if(map[hy][hx + dx] != 3) {						
-						while(map[hy][hx + dx] != 3 && map[hy+dy][hx] == 3 && hx + dx > 0 && hx + dx < map[0].length) {
-							hx += dx;
-							step++;
-							map[hy][hx] = 2;
-						}
-					}
-					else {
-						while((map[hy][hx - dx] != 3 && map[hy + dy][hx] == 3) && hx - dx > 0 && hx - dx < map[0].length) {
-							hx -= dx;
-							step++;
-							map[hy][hx] = 2;
-						}
-					}
-				}
-				
-				else if(hy == ty && map[hy][hx + dx] == 3) {					
-					if(map[hy + dy][hx] != 3) {						
-						while(map[hy + dy][hx] != 3 && map[hy][hx + dx] == 3 && hy + dy < map.length && hy + dy > 0) {
-							hy += dy;
-							step++;
-							map[hy][hx] = 2;
-						}
-					}
-					else {
-						while(map[hy - dy][hx] != 3 && map[hy][hx + dx] == 3 && hy - dy > 0 && hy - dy < map.length) {
-							hy -= dy;
-							step++;
-							map[hy][hx] = 2;
-						}
-					}
-				} 
-			}
-			
-			else {	
-				if(tx > hx || map[hy][hx + 1] != 3 || hx + 1 < map[0].length || hx + 1 > 0) {
-					dx = r;
-				}
-				else if(tx < hx || map[hy][hx - 1] != 3 || hx - 1 < map[0].length || hx - 1 > 0) {
-					dx = l;
-				}
-				else if(ty > hy || map[hy + 1][hx] != 3 || hy + 1 > 0 || hy + 1 < map.length) {
-					dy = d;
-				}
-				else if(ty > hy || map[hy - 1][hx] != 3 || hy - 1 > 0 || hy - 1 < map.length) {
-					dy = u;
-				}
-			}			
-		}
 
-		// Printing the matrix
-		System.out.println("\n===================\n");
-		System.out.println("Printing the final matrix");
-		printing(map);
-		System.out.println("\nStep: " + step);
+		int[] dx = {0, 0, 1, -1};
+		int[] dy = {1, -1, 0, 0};
+		
+		Queue<Queue_Try> q = new LinkedList<>();
+		
+		q.add(new Pointer(hy, hx, 0, map));
+
+		while(!q.empty()) {
+			Pointer temp = q.poll();
+
+			for(int i = 0; i < 4; i++) {
+				if((temp.x + dx[i] < 10 && temp.x + dx[i] >= 0) && (temp.y + dy[i] >= 0 && temp.y + dy[i] < 22) && map[temp.y + dy[i]][temp.x + dx[i]] != 3 ) {
+					Pointer current = new Pointer(temp.y + dy[i], temp.x + dx[i], temp.steps + 1, map);
+
+					if(map[current.y][current.x] == 4 && current.y == ty && current.x == tx) { // if the current is the target 
+
+					}
+					else if(!q.contains(current)) { // the current Pointer has not been visited before, and it's not the target 
+						current.map[current.y][current.x] = 2;
+					}
+				}
+			}
+		}
 	}
 
 	public static void main(String[] args) {
-		Main eng = new Main();
+		Queue_Try engine = new Queue_Try();
 		
 		Random rand = new Random();
 		int tx = rand.nextInt(0, 10), ty = rand.nextInt(0, 22);
 		int hx, hy;
-		do {
+		
+		while(true) {
 			hx = rand.nextInt(0, 10);
 			hy = rand.nextInt(0, 22);
-		} while (hy == ty && hx == tx);
+			
+			if((hy != ty && hx != tx)) break;
+		} 
 		
 		int ox1, oy1, ox2, oy2, ox3, oy3;
-		do {
+		while(true) {
 			ox1 = rand.nextInt(0, 10);
 			oy1 = rand.nextInt(0, 20);
-		} while ((oy1 == ty || oy1 == hy) && (ox1 == tx || ox1 == hx));
+
+			if(oy1 != ty && oy1 == hy && ox1 != tx && ox1 != hx) break;
+		} 
 		
-		do {
+		while(true) {
 			ox2 = rand.nextInt(0, 10);
 			oy2 = rand.nextInt(0, 20);
-		} while ((oy2 == ty || oy2 == hy) && (ox2 == tx || ox2 == hx));
+
+			if(oy2 != ty && oy2 == hy && ox2 != tx && ox2 != hx) break;
+		} 
 		
-		do {
+		while(true) {
 			ox3 = rand.nextInt(0, 10);
 			oy3 = rand.nextInt(0, 20);
-		} while ((oy3 == ty || oy3 == hy) && (ox3 == tx || ox3 == hx));
+		
+			if(oy3 != ty && oy3 != hy && ox3 != tx && ox3 != hx) break;
+		} 
 		
 		//engine.engine(tx, ty, hx, hy, ox1, oy1, ox2, oy2, ox3, oy3);
-		eng.engine(8, 1, 4, 5, 5, 1, 6, 2, 7, 2);
+		engine.engine(8, 1, 4, 5, 5, 1, 6, 2, 7, 2);
+		
+		// Printing the matrix
+		System.out.println("\n===================\n");
+		System.out.println("Printing the final matrix");
+		printing(engine.map);
+		System.out.println("\nStep: " + engine.step);
 	}
+
 }
