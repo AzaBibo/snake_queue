@@ -3,7 +3,7 @@ import java.util.Queue;
 import java.util.HashSet;
 import java.util.Random;
 
-/*@About
+/* @About
  * the program is used to find the shortest path on the grid from the beginning (1) to the target (4)
  * Algorithm used: BFS (breadth-first search)
  * Coordinates (target, beginning, obstacles ) are randomly generated  
