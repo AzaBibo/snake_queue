@@ -83,7 +83,7 @@ public class Main {
 					}
 				}
 			}
-		}
+		}	
 				
 		// Printing the final matrix
 		System.out.println("\n===================\n");
@@ -129,7 +129,7 @@ public class Main {
 			if(oy3 != ty && oy3 != hy && ox3 != tx && ox3 != hx) break;
 		} 
 		
-		engine.engine(tx, ty, hx, hy, ox1, oy1, ox2, oy2, ox3, oy3);
-		//engine.engine(8, 1, 4, 5, 8, 2, 9, 2, 7, 2);
+		//engine.engine(tx, ty, hx, hy, ox1, oy1, ox2, oy2, ox3, oy3);
+		engine.engine(8, 1, 4, 5, 8, 2, 9, 2, 6, 1);
 	}
 }
