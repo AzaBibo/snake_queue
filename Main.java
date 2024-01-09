@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public class Main {
 	
-	int[][] map = new int[22][10]; // initial map, which we will modify
+	int[][] map = new int[22][10]; // initial grid, which we will modify
 	int step = 220; // to find the least path 
 	int total_paths = 0; // to keep track of total number of possible paths 
 	
