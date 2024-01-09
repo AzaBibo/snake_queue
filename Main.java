@@ -25,7 +25,7 @@ public class Main {
 	
 		int[][] copy = new int[original.length][];
 		for (int i = 0; i < original.length; i++) {
-			// Manual deep copy for each subarray (row)
+			// Manual deep copy for each sub-array (row)
 			copy[i] = new int[original[i].length];
 			System.arraycopy(original[i], 0, copy[i], 0, original[i].length);
 		}
