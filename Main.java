@@ -3,12 +3,18 @@ import java.util.Queue;
 import java.util.HashSet;
 import java.util.Random;
 
+/*@About
+ * the program is used to find the shortest path on the grid from the beginning (1) to the target (4)
+ * Algorithm used: BFS (breadth-first search)
+ * Coordinates (target, beginning, obstacles ) are randomly generated  
+ */
 public class Main {
 	
 	int[][] map = new int[22][10]; // initial map, which we will modify
 	int step = 220; // to find the least path 
-	int total_paths = 0;
+	int total_paths = 0; // to keep track of total number of possible paths 
 	
+	// to print the grid 
 	public static void printing(int[][] map) { // Printing the desk
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map[i].length; j++) {
@@ -18,6 +24,7 @@ public class Main {
 		}
 	}
 
+	// to clone a matrix (2D array)
 	public static int[][] deepCopy(int[][] original) {
 		if (original == null) {
 			return null;
@@ -33,16 +40,15 @@ public class Main {
 		return copy;
 	}
 	
-	
+	// the main code for the algorithm
 	public void engine(int tx, int ty, int hx, int hy, int ox1, int oy1, int ox2, int oy2, int ox3, int oy3) {
-		
+		// initial grid preparation
 		for (int i = 0; i < map.length; i++) {
 			for (int j = 0; j < map[i].length; j++) {
 				map[i][j] = 0;
 			}
 		}
 
-		
 		map[ty][tx] = 4; // target
 		map[hy][hx] = 1; // worm head
 		map[oy1][ox1] = 3; // obstacle 1
@@ -56,13 +62,14 @@ public class Main {
 		int[] dx = {0, 0, 1, -1};
 		int[] dy = {1, -1, 0, 0};
 		
-		Queue<Pointer> q = new LinkedList<>();
+		// initialization of main variables 
+		Queue<Pointer> q = new LinkedList<>(); // Queue to visit each coordinate
 		HashSet<String> hs = new HashSet<String>(); // to store previously visited coordinations
-		int[][] final_map = null; // final map
+		int[][] final_map = null; // final grid (map)
 		
 		q.add(new Pointer(hy, hx, 0, map)); // add the first coordinate to the queue
 
-		while(!q.isEmpty()) {
+		while(!q.isEmpty()) { // used BFS (breath-first search) to find the shortest path
 			Pointer temp = q.poll();
 
 			for(int i = 0; i < 4; i++) {
@@ -96,6 +103,7 @@ public class Main {
 	public static void main(String[] args) {
 		Main engine = new Main();
 		
+		// randomly initializing all coordinates 
 		Random rand = new Random();
 		int tx = rand.nextInt(0, 10), ty = rand.nextInt(0, 22);
 		int hx, hy;
